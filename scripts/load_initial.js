@@ -1,23 +1,25 @@
-(function (initIntroAnimation) {
+(function () {
     var bodyElement = document.getElementsByTagName('body')[0],
-        introCanvas = document.createElement('canvas'),
+        introCanvasDiv = document.createElement('div'),
         wrapper = document.createElement('div'),
         documentFragment = document.createDocumentFragment(),
         CONSTANTS = {
             INTRO_CANVAS_WIDTH: '800',
-            INTRO_CANVAS_HEIGHT: '500'
+            INTRO_CANVAS_HEIGHT: '500',
+            INTRO_SPRITE_LOCATION: 'media/BlackRussianIntroSprite.png',
+            INTRO_ANIMATION_DIV_ID: 'intro-animation-div'
         };
 
     function initIntroCanvas() {
-        introCanvas.setAttribute('id', 'intro-animation-canvas');
-        introCanvas.setAttribute('width', CONSTANTS.INTRO_CANVAS_WIDTH);
-        introCanvas.setAttribute('height', CONSTANTS.INTRO_CANVAS_HEIGHT);
+        introCanvasDiv.setAttribute('id', CONSTANTS.INTRO_ANIMATION_DIV_ID);
+        introCanvasDiv.setAttribute('width', CONSTANTS.INTRO_CANVAS_WIDTH);
+        introCanvasDiv.setAttribute('height', CONSTANTS.INTRO_CANVAS_HEIGHT);
     }
 
     function initWrapperDiv() {
         wrapper.setAttribute('id', 'wrapper');
-        wrapper.appendChild(introCanvas);
-        bodyElement.appendChild(wrapper);
+        wrapper.appendChild(introCanvasDiv);
+        documentFragment.appendChild(wrapper);
     }
 
     function appendToFragment() {
@@ -33,7 +35,7 @@
     appendToFragment();
     appendToBody();
 
-    bodyElement.onload = initIntroAnimation(introCanvas);
-}(initIntroAnimation));
+    bodyElement.onload = drawIntro(CONSTANTS.INTRO_SPRITE_LOCATION, introSpriteCoordinates, CONSTANTS.INTRO_ANIMATION_DIV_ID);
+}());
 
 
