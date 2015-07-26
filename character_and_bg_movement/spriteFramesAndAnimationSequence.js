@@ -1,120 +1,138 @@
 var frames = {
-    "brick_black": {
-        "frame": {"x": 0, "y": 0, "w": 144, "h": 144}
+    "brickBlack": {
+        "frame": {"x": 10, "y": 10, "w": 144, "h": 144}
     },
-    "brick_gray": {
-        "frame": {"x": 144, "y": 0, "w": 144, "h": 144}
+    "brickGray": {
+        "frame": {"x": 164, "y": 10, "w": 144, "h": 144}
     },
     "enemy1Dead": {
-        "frame": {"x": 288, "y": 0, "w": 144, "h": 72}
+        "frame": {"x": 318, "y": 10, "w": 144, "h": 72}
     },
     "enemy1Move001": {
-        "frame": {"x": 432, "y": 0, "w": 144, "h": 144}
+        "frame": {"x": 472, "y": 10, "w": 144, "h": 144}
     },
     "enemy1Move002": {
-        "frame": {"x": 720, "y": 0, "w": 144, "h": 144}
+        "frame": {"x": 626, "y": 10, "w": 144, "h": 144}
     },
     "enemy1Move003": {
-        "frame": {"x": 576, "y": 0, "w": 144, "h": 144}
+        "frame": {"x": 780, "y": 10, "w": 144, "h": 144}
     },
     "enemy1Move004": {
-        "frame": {"x": 720, "y": 0, "w": 144, "h": 144}
+        "frame": {"x": 10, "y": 164, "w": 144, "h": 144}
     },
     "enemy2Move001": {
-        "frame": {"x": 864, "y": 0, "w": 144, "h": 108}
+        "frame": {"x": 164, "y": 164, "w": 144, "h": 108}
     },
     "enemy2Move002": {
-        "frame": {"x": 144, "y": 144, "w": 144, "h": 108}
+        "frame": {"x": 318, "y": 164, "w": 144, "h": 108}
     },
-    "enemy2Move003": {
-        "frame": {"x": 0, "y": 144, "w": 144, "h": 108}
+    "enemy2Move00g": {
+        "frame": {"x": 472, "y": 164, "w": 144, "h": 108}
     },
     "enemy2Move004": {
-        "frame": {"x": 144, "y": 144, "w": 144, "h": 108}
+        "frame": {"x": 318, "y": 164, "w": 144, "h": 108}
     },
-    "fire": {
-        "frame": {"x": 288, "y": 144, "w": 144, "h": 144}
+    "fire001": {
+        "frame": {"x": 626, "y": 164, "w": 144, "h": 108}
+    },
+    "fire002": {
+        "frame": {"x": 10, "y": 318, "w": 144, "h": 108}
+    },
+    "fire003": {
+        "frame": {"x": 780, "y": 164, "w": 144, "h": 108}
+    },
+    "fire004": {
+        "frame": {"x": 10, "y": 318, "w": 144, "h": 108}
     },
     "groundBottom": {
-        "frame": {"x": 432, "y": 144, "w": 144, "h": 144}
+        "frame": {"x": 164, "y": 318, "w": 144, "h": 144}
     },
     "groundTop": {
-        "frame": {"x": 576, "y": 144, "w": 144, "h": 144}
+        "frame": {"x": 318, "y": 318, "w": 144, "h": 144}
     },
-    "ice": {
-        "frame": {"x": 720, "y": 144, "w": 144, "h": 144}
+    "ice001": {
+        "frame": {"x": 472, "y": 318, "w": 144, "h": 144}
+    },
+    "ice002": {
+        "frame": {"x": 626, "y": 318, "w": 144, "h": 144}
+    },
+    "ice003": {
+        "frame": {"x": 780, "y": 318, "w": 144, "h": 144}
+    },
+    "ice004": {
+        "frame": {"x": 10, "y": 472, "w": 144, "h": 144}
     },
     "playerJumpBack001": {
-        "frame": {"x": 864, "y": 144, "w": 144, "h": 194}
+        "frame": {"x": 164, "y": 472, "w": 144, "h": 194}
     },
     "playerJumpBack002": {
-        "frame": {"x": 288, "y": 338, "w": 144, "h": 194}
+        "frame": {"x": 318, "y": 472, "w": 144, "h": 194}
     },
     "playerJumpBack003": {
-        "frame": {"x": 144, "y": 338, "w": 144, "h": 194}
+        "frame": {"x": 472, "y": 472, "w": 144, "h": 194}
     },
     "playerJumpBack004": {
-        "frame": {"x": 0, "y": 338, "w": 144, "h": 194}
+        "frame": {"x": 626, "y": 472, "w": 144, "h": 194}
     },
     "playerJumpBack005": {
-        "frame": {"x": 144, "y": 338, "w": 144, "h": 194}
+        "frame": {"x": 472, "y": 472, "w": 144, "h": 194}
     },
     "playerJumpBack006": {
-        "frame": {"x": 288, "y": 338, "w": 144, "h": 194}
+        "frame": {"x": 318, "y": 472, "w": 144, "h": 194}
     },
     "playerJumpFront001": {
-        "frame": {"x": 432, "y": 338, "w": 144, "h": 194}
+        "frame": {"x": 780, "y": 472, "w": 144, "h": 194}
     },
     "playerJumpFront002": {
-        "frame": {"x": 576, "y": 338, "w": 144, "h": 194}
+        "frame": {"x": 318, "y": 676, "w": 144, "h": 194}
     },
     "playerJumpFront003": {
-        "frame": {"x": 720, "y": 338, "w": 144, "h": 194}
+        "frame": {"x": 164, "y": 676, "w": 144, "h": 194}
     },
     "playerJumpFront004": {
-        "frame": {"x": 864, "y": 338, "w": 144, "h": 194}
+        "frame": {"x": 10, "y": 676, "w": 144, "h": 194}
     },
     "playerJumpFront005": {
-        "frame": {"x": 720, "y": 338, "w": 144, "h": 194}
+        "frame": {"x": 164, "y": 676, "w": 144, "h": 194}
     },
     "playerJumpFront006": {
-        "frame": {"x": 576, "y": 338, "w": 144, "h": 194}
+        "frame": {"x": 318, "y": 676, "w": 144, "h": 194}
     },
     "playerWalkBack001": {
-        "frame": {"x": 0, "y": 532, "w": 144, "h": 194}
+        "frame": {"x": 472, "y": 676, "w": 144, "h": 194}
     },
     "playerWalkBack002": {
-        "frame": {"x": 144, "y": 532, "w": 144, "h": 194}
+        "frame": {"x": 626, "y": 676, "w": 144, "h": 194}
     },
     "playerWalkBack003": {
-        "frame": {"x": 288, "y": 532, "w": 144, "h": 194}
+        "frame": {"x": 780, "y": 676, "w": 144, "h": 194}
     },
     "playerWalkBack004": {
-        "frame": {"x": 432, "y": 532, "w": 144, "h": 194}
+        "frame": {"x": 10, "y": 880, "w": 144, "h": 194}
     },
     "playerWalkBack005": {
-        "frame": {"x": 576, "y": 532, "w": 144, "h": 194}
+        "frame": {"x": 164, "y": 880, "w": 144, "h": 194}
     },
     "playerWalkBack006": {
-        "frame": {"x": 720, "y": 532, "w": 144, "h": 194}
+        "frame": {"x": 318, "y": 880, "w": 144, "h": 194}
     },
     "playerWalkFront001": {
-        "frame": {"x": 864, "y": 532, "w": 144, "h": 194}
+        "frame": {"x": 472, "y": 880, "w": 144, "h": 194}
     },
     "playerWalkFront002": {
-        "frame": {"x": 0, "y": 726, "w": 144, "h": 194}
+        "frame": {"x": 626, "y": 880, "w": 144, "h": 194}
     },
     "playerWalkFront003": {
-        "frame": {"x": 144, "y": 726, "w": 144, "h": 194}
+        "frame": {"x": 780, "y": 880, "w": 144, "h": 194}
     },
     "playerWalkFront004": {
-        "frame": {"x": 288, "y": 726, "w": 144, "h": 194}
+        "frame": {"x": 10, "y": 1084, "w": 144, "h": 194}
     },
     "playerWalkFront005": {
-        "frame": {"x": 432, "y": 726, "w": 144, "h": 194}
+        "frame": {"x": 164, "y": 1084, "w": 144, "h": 194}
     },
     "playerWalkFront006": {
-        "frame": {"x": 576, "y": 726, "w": 144, "h": 194}
+        "frame": {"x": 318, "y": 1084, "w": 144, "h": 194}
     }
 };
 
@@ -310,5 +328,51 @@ var animationPlayer = {
             frames.enemy2Move004.frame.w,
             frames.enemy2Move004.frame.h,
             frames.enemy2Move004.frame.x
+        ]
+    },
+    animationFire = {
+        idle: [
+            frames.fire001.frame.x,
+            frames.fire001.frame.y,
+            frames.fire001.frame.w,
+            frames.fire001.frame.h,
+
+            frames.fire002.frame.x,
+            frames.fire002.frame.y,
+            frames.fire002.frame.w,
+            frames.fire002.frame.h,
+
+            frames.fire003.frame.x,
+            frames.fire003.frame.y,
+            frames.fire003.frame.w,
+            frames.fire003.frame.h,
+
+            frames.fire004.frame.y,
+            frames.fire004.frame.w,
+            frames.fire004.frame.h,
+            frames.fire004.frame.x
+        ]
+    },
+    animationICe = {
+        idle: [
+            frames.ice001.frame.x,
+            frames.ice001.frame.y,
+            frames.ice001.frame.w,
+            frames.ice001.frame.h,
+
+            frames.ice002.frame.x,
+            frames.ice002.frame.y,
+            frames.ice002.frame.w,
+            frames.ice002.frame.h,
+
+            frames.ice003.frame.x,
+            frames.ice003.frame.y,
+            frames.ice003.frame.w,
+            frames.ice003.frame.h,
+
+            frames.ice004.frame.y,
+            frames.ice004.frame.w,
+            frames.ice004.frame.h,
+            frames.ice004.frame.x
         ]
     };
