@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7D999BE4-C027-49E9-94FB-03A1CAD3DAC0}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>javascript_tower_platformer</RootNamespace>
+    <AssemblyName>javascript-tower-platformer</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="images\coin.png" />
+    <Content Include="images\coins.png" />
+    <Content Include="images\ground.png" />
+    <Content Include="images\ladder.png" />
+    <Content Include="images\monster.png" />
+    <Content Include="images\monster\blocker1.png" />
+    <Content Include="images\monster\blocker2.png" />
+    <Content Include="images\monster\flyleft1.png" />
+    <Content Include="images\monster\flyleft2.png" />
+    <Content Include="images\monster\flyright1.png" />
+    <Content Include="images\monster\flyright2.png" />
+    <Content Include="images\monster\slimeleft1.png" />
+    <Content Include="images\monster\slimeleft2.png" />
+    <Content Include="images\monster\slimeright1.png" />
+    <Content Include="images\monster\slimeright2.png" />
+    <Content Include="images\monster\snailleft1.png" />
+    <Content Include="images\monster\snailleft2.png" />
+    <Content Include="images\monster\snailright1.png" />
+    <Content Include="images\monster\snailright2.png" />
+    <Content Include="images\player.png" />
+    <Content Include="images\player\00_right.png" />
+    <Content Include="images\player\01_right.png" />
+    <Content Include="images\player\02_right.png" />
+    <Content Include="images\player\03_right.png" />
+    <Content Include="images\player\04_right.png" />
+    <Content Include="images\player\05_right.png" />
+    <Content Include="images\player\06_right.png" />
+    <Content Include="images\player\07_right.png" />
+    <Content Include="images\player\08_right.png" />
+    <Content Include="images\player\09_right.png" />
+    <Content Include="images\player\10_right.png" />
+    <Content Include="images\player\11_front.png" />
+    <Content Include="images\player\12_front_right.png" />
+    <Content Include="images\player\13_front_left.png" />
+    <Content Include="images\player\14_jump.png" />
+    <Content Include="images\player\15_hurt_left.png" />
+    <Content Include="images\player\16_hurt_right.png" />
+    <Content Include="images\player\17_left.png" />
+    <Content Include="images\player\18_left.png" />
+    <Content Include="images\player\19_left.png" />
+    <Content Include="images\player\20_left.png" />
+    <Content Include="images\player\21_left.png" />
+    <Content Include="images\player\22_left.png" />
+    <Content Include="images\player\23_left.png" />
+    <Content Include="images\player\24_left.png" />
+    <Content Include="images\player\25_left.png" />
+    <Content Include="images\player\26_left.png" />
+    <Content Include="images\player\27_left.png" />
+    <Content Include="images\player\28_climb.png" />
+    <Content Include="images\player\29_climb.png" />
+    <Content Include="images\player\30_climb.png" />
+    <Content Include="images\player\31_climb.png" />
+    <Content Include="images\player\32_climb.png" />
+    <Content Include="images\player\33_climb.png" />
+    <Content Include="images\player\34_climb.png" />
+    <Content Include="images\player\35_climb.png" />
+    <Content Include="images\player\36_climb.png" />
+    <Content Include="images\player\37_climb.png" />
+    <Content Include="images\player\38_climb.png" />
+    <Content Include="index.html" />
+    <Content Include="js\common.js" />
+    <Content Include="js\fpsmeter.min.js" />
+    <Content Include="js\levels.js" />
+    <Content Include="js\platform.js" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>5251</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:5251/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
