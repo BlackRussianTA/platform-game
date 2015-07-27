@@ -128,6 +128,7 @@ var drawIntro = (function () {
             whyThat,
 			newGame,
 			howToPlay,
+            topScores,
             sunZoomAndMoveDownAnimation = new Kinetic.Animation(sunZoomAndMoveDown, sunLayer),
             iseDropDownAnimation = new Kinetic.Animation(iceDropDown, russianLayer),
             opacityChange = 1;
@@ -200,22 +201,22 @@ var drawIntro = (function () {
         };
 		
 		function newGameColor(ng){
-		 	ng.on('mouseover',function(){ng.fill('red');});
+		 	ng.on('mouseover',function(){ng.fill('gray');});
 			ng.on('mouseout',function(){ng.fill('black');});
 		};
 		
 		function howToPlayColor(ng){
-			ng.on('mouseover',function(){ng.fill('red');});
+			ng.on('mouseover',function(){ng.fill('gray');});
 			ng.on('mouseout',function(){ng.fill('black');});
 		}
 		
 		function topScoresColor(ng){
-			ng.on('mouseover',function(){ng.fill('red');});
+			ng.on('mouseover',function(){ng.fill('gray');});
 			ng.on('mouseout',function(){ng.fill('black');});
 		}
 		
 		window.onclick=function(){
-			if(newGame.fill()=='red'){
+			if(newGame.fill()=='gray'){
 				window.location="character_and_bg_movement/index.html";
 			}
 		}
@@ -627,7 +628,7 @@ var drawIntro = (function () {
                 text: 'HEAT ESCAPE',
                 fontSize: 100,
                 fontFamily: 'iceCream',
-                fill: 'orange',
+                fill: 'black',
                 opacity: 0
             });
 
@@ -646,7 +647,7 @@ var drawIntro = (function () {
             whyThat = new Kinetic.Text({
                 x: CONSTANTS.whyThat.INITIAL_X,
                 y: CONSTANTS.whyThat.INITIAL_Y,
-                text: 'Put some meaningful text please',
+                text: '100 TEI PRAJI6 DEIBA',
                 fontSize: 45,
                 fontFamily: 'iceCream',
                 fill: 'white',
@@ -672,6 +673,7 @@ var drawIntro = (function () {
                 fill: 'black',
                 opacity: 0
             });
+
 			topScores =  new Kinetic.Text({
                 x: CONSTANTS.thirdLine.INITIAL_X,
                 y: CONSTANTS.thirdLine.INITIAL_Y,
@@ -681,9 +683,7 @@ var drawIntro = (function () {
                 fill: 'black',
                 opacity: 0
             });
-			
         }
-		
     };
 
     return drawIntro;
