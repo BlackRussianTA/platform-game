@@ -33,7 +33,7 @@ window.onload = function () {
             PLAYER_IMAGE: 'images/Players/spritesheet_players.png',
             PLAYER_JUMP_HEIGHT: 210,
             BACKGROUND_INITIAL_OFFSET_X: 10,
-            BACKGROUND_INITIAL_OFFSET_Y: 210,
+            BACKGROUND_INITIAL_OFFSET_Y: 100,
             PLAYER_MOVE_SPEED: 5
         };
 
@@ -234,7 +234,8 @@ window.onload = function () {
                         //console.log('player end: '+ (player.object.getX()  + player.width));
                         //console.log('tile start: '+ (obj.getX()));
                         if(obj.getY() + 2.47058823529414 == player.object.getY() + player.height
-                           // && ((player.object.getX()  + player.width - player.width/3) >= obj.getX())
+                           && (player.object.getX() <= obj.getX() + elem.width)
+                           && (player.object.getX() >= obj.getX())
                             //&& (player.object.getX() - player.width/3 <= obj.getX() + elem.width)
                             ////&& player.object.getX() + 128 <= obj.getX() + elem.width
 
@@ -309,6 +310,9 @@ window.onload = function () {
                             if (originalPositionBackground.y > background.object.fillPatternOffsetY() & collision === false ) {
                                 requestAnimationFrame(performJump);
                             } else {
+                                if(collision === false){
+                                    player.fall(background, ground);
+                                }
                                 elem.jumpStatus = false;
                                 elem.object.animation('idle');
                             }
@@ -329,8 +333,41 @@ window.onload = function () {
                     if (this.object.animation() != 'walk') {
                         this.object.animation('walk')
                     }
-                    background.move(direction * constants.PLAYER_MOVE_SPEED);
-                    ground.move(-1*direction * constants.PLAYER_MOVE_SPEED);
+                    background.object.fillPatternOffsetX(background.object.fillPatternOffsetX() + direction * constants.PLAYER_MOVE_SPEED);
+                    background.layer.draw();
+                    ground.objects.forEach(function(obj){
+                        obj.setX(obj.getX() + -1*direction * constants.PLAYER_MOVE_SPEED);
+                    });
+                    ground.layer.draw();
+                    var collision = ground.player_collision_top(this);
+                    if(collision === false){
+                        this.fall(background, ground)
+                    }
+                    console.log(collision);
+                },
+                fall: function(background, ground){
+                    var elem = this;
+                    function performFall(){
+                        console.log(background.object.fillPatternOffsetY());
+                        background.object.fillPatternOffsetY(background.object.fillPatternOffsetY() + 5);
+                        background.layer.draw();
+                        ground.objects.forEach(function(obj){
+
+                            obj.setY(obj.getY() -5);
+                        });
+                        ground.layer.draw();
+
+                        var collision = ground.player_collision_top(elem);
+                        console.log("collision? "+ collision);
+                        if(background.object.fillPatternOffsetY() >= 420){
+                            alert("Game Over!");
+                        }
+                        if (background.object.fillPatternOffsetY() <= 420 && collision === false) {
+                            requestAnimationFrame(performFall);
+                        }
+                    }
+
+                    performFall();
                 }
             };
             return player
@@ -395,8 +432,10 @@ window.onload = function () {
     var stage = module.getStage('kinetic-canvas', 800, 600);
     var background = module.getBackground(stage);
     var setup = [
-        {'x': 100, 'y': 250,'type': 'cliff_left'},
-        {'x': 228, 'y': 250,'type': 'cliff_right'},
+        {'x': 300, 'y': 430,'type': 'cliff_left'},
+        {'x': 428, 'y': 430,'type': 'cliff_right'},
+        {'x': 100, 'y': 280,'type': 'cliff_left'},
+        {'x': 228, 'y': 280,'type': 'cliff_right'},
     ];
     var ground;
     var player;
@@ -417,6 +456,8 @@ window.onload = function () {
             game.playerMoveLeft();
         } else if (ev.keyCode === 39) {
             game.playerMoveRight();
+        } else {
+            player.fall(background, ground);
         }
     };
 };
