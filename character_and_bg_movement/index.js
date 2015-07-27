@@ -1,15 +1,13 @@
 window.onload = function () {
     function game() {
-		var constants = {
+        var constants = {
             BACKGROUND_IMAGE: 'images/Backgrounds/colored_grass.png',
             PLAYER_IMAGE: 'images/Players/spritesheet_players.png',
             BACKGROUND_INITIAL_OFFSET_X: 10,
             BACKGROUND_INITIAL_OFFSET_Y: 250,
             PLAYER_MOVE_SPEED: 5
         };
-		
-		var score=0;
-		
+
         function setBackgroundLayer(stage) {
             var layer = new Kinetic.Layer();
 
@@ -213,6 +211,7 @@ window.onload = function () {
     var background = module.getBackground(stage);
     var player;
     var game;
+	var score=0;
     setTimeout(function () {
         player = module.getPlayer(stage);
 
@@ -231,4 +230,13 @@ window.onload = function () {
 			
         }
     };
+	
+	window.onkeyup=function(ev){
+		if(ev.keyCode===39){
+			window.clearTimeout(myVar);
+		}
+		
+	}
+	
+
 };
