@@ -65,6 +65,18 @@ var drawIntro = (function () {
                     "INITIAL_X": 90,
                     "INITIAL_Y": 350
                 },
+				"firstLine":{
+                    "INITIAL_X": 150,
+                    "INITIAL_Y": 50
+				},
+				"secondLine":{
+						"INITIAL_X": 150,
+						"INITIAL_Y": 130
+				},
+				"thirdLine":{
+						"INITIAL_X": 150,
+						"INITIAL_Y": 210
+				},
                 HEAD_MAX_ROTATION_ANGLE: 1,
                 HEAD_SHAKE_DURATION: 6000,
                 SUN_INITIAL_MOVE_DURATION: 3000
@@ -114,6 +126,9 @@ var drawIntro = (function () {
             presents,
             tears,
             whyThat,
+			newGame,
+			howToPlay,
+            topScores,
             sunZoomAndMoveDownAnimation = new Kinetic.Animation(sunZoomAndMoveDown, sunLayer),
             iseDropDownAnimation = new Kinetic.Animation(iceDropDown, russianLayer),
             opacityChange = 1;
@@ -168,6 +183,10 @@ var drawIntro = (function () {
                                             sunZoomAndMoveDownAnimation.start();
                                             setTimeout(function () {
                                                 sunZoomAndMoveDownAnimation.stop();
+												newGameText();
+												newGameColor(newGame);
+												howToPlayColor(howToPlay);
+												topScoresColor(topScores);
                                             }, 7000)
                                         }, 5000)
                                     }, 3000)
@@ -177,10 +196,32 @@ var drawIntro = (function () {
                     }, 2000)
                 }, 2100)
             }, CONSTANTS.SUN_INITIAL_MOVE_DURATION);
-
+			
             initialSunMoveDrawer();
         };
-
+		
+		function newGameColor(ng){
+		 	ng.on('mouseover',function(){ng.fill('gray');});
+			ng.on('mouseout',function(){ng.fill('black');});
+		};
+		
+		function howToPlayColor(ng){
+			ng.on('mouseover',function(){ng.fill('gray');});
+			ng.on('mouseout',function(){ng.fill('black');});
+		}
+		
+		function topScoresColor(ng){
+			ng.on('mouseover',function(){ng.fill('gray');});
+			ng.on('mouseout',function(){ng.fill('black');});
+		}
+		
+		window.onclick=function(){
+			if(newGame.fill()=='gray'){
+				window.location="character_and_bg_movement/index.html";
+			}
+		}
+ 
+		
         function heatEscapeText() {
             var opacity = heatEscape.opacity();
 
@@ -191,7 +232,7 @@ var drawIntro = (function () {
             if (opacity < 6) {
                 requestAnimationFrame(heatEscapeText);
             } else {
-                heatEscape.remove();
+               // heatEscape.remove();
                 frontLayer.draw();
             }
         }
@@ -315,7 +356,15 @@ var drawIntro = (function () {
                 frontLayer.draw();
             }
         }
-
+		
+		function newGameText(){
+			newGame.opacity(100);
+			howToPlay.opacity(100);
+			topScores.opacity(100);
+		    frontLayer.draw();
+        }
+		
+		
         function iceDropDown() {
             var positionY = iceCubes.y() + 1;
             iceCubes.y(positionY);
@@ -419,12 +468,14 @@ var drawIntro = (function () {
             russianLayer.add(torso);
             russianLayer.add(iceCubes);
 
-
             frontLayer.add(presents);
             frontLayer.add(heatEscape);
             frontLayer.add(whyThat);
+			frontLayer.add(newGame);
+			frontLayer.add(howToPlay);
+			frontLayer.add(topScores);
+			
             //frontLayer.add(tears);
-
             stage.add(backgroundLayer);
             stage.add(sunLayer);
             stage.add(cloudLayer);
@@ -575,7 +626,7 @@ var drawIntro = (function () {
                 x: CONSTANTS.heatEscape.INITIAL_X,
                 y: CONSTANTS.heatEscape.INITIAL_Y,
                 text: 'HEAT ESCAPE',
-                fontSize: 70,
+                fontSize: 100,
                 fontFamily: 'iceCream',
                 fill: 'black',
                 opacity: 0
@@ -602,8 +653,39 @@ var drawIntro = (function () {
                 fill: 'white',
                 opacity: 0
             });
+			
+			newGame =  new Kinetic.Text({
+                x: CONSTANTS.firstLine.INITIAL_X,
+                y: CONSTANTS.firstLine.INITIAL_Y,
+                text: 'New Game',
+                fontSize: 60,
+                fontFamily: 'iceCream',
+                fill: 'black',
+                opacity: 0
+            });
+			
+			howToPlay =  new Kinetic.Text({
+                x: CONSTANTS.secondLine.INITIAL_X,
+                y: CONSTANTS.secondLine.INITIAL_Y,
+                text: 'How To Play',
+                fontSize: 60,
+                fontFamily: 'iceCream',
+                fill: 'black',
+                opacity: 0
+            });
+
+			topScores =  new Kinetic.Text({
+                x: CONSTANTS.thirdLine.INITIAL_X,
+                y: CONSTANTS.thirdLine.INITIAL_Y,
+                text: 'Top Scores',
+                fontSize: 60,
+                fontFamily: 'iceCream',
+                fill: 'black',
+                opacity: 0
+            });
         }
     };
 
     return drawIntro;
 }());
+
