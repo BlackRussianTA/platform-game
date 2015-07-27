@@ -1,13 +1,15 @@
 window.onload = function () {
     function game() {
-        var constants = {
+		var constants = {
             BACKGROUND_IMAGE: 'images/Backgrounds/colored_grass.png',
             PLAYER_IMAGE: 'images/Players/spritesheet_players.png',
             BACKGROUND_INITIAL_OFFSET_X: 10,
             BACKGROUND_INITIAL_OFFSET_Y: 250,
             PLAYER_MOVE_SPEED: 5
         };
-
+		
+		var score=0;
+		
         function setBackgroundLayer(stage) {
             var layer = new Kinetic.Layer();
 
@@ -140,7 +142,7 @@ window.onload = function () {
                 move: function (background, direction) {
                     if(this.object.scale().x !== direction){
                         this.object.stop();
-                        this.object.setX(this.object.getX() -  direction *128);
+                        this.object.setX(this.object.getX() -  direction *256);
                         this.layer.draw();
 
                         this.object.scale({x:direction,y:1});
@@ -222,8 +224,11 @@ window.onload = function () {
         }
         else if (ev.keyCode === 37) {
             game.playerMoveLeft();
+			
         } else if (ev.keyCode === 39) {
             game.playerMoveRight();
+			document.getElementById("score").innerHTML = score++;
+			
         }
     };
 };
