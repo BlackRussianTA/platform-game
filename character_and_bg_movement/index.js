@@ -37,8 +37,8 @@ window.onload = function () {
 
             imageObj.src = constants.PLAYER_IMAGE;
             var player = new Kinetic.Sprite({
-                x: stage.getWidth() /2.3 ,
-                y: stage.height() /3.4 ,
+                x: stage.getWidth() / 2.3,
+                y: stage.height() / 3.4,
                 image: imageObj,
                 animation: 'idle',
                 animations: {
@@ -50,7 +50,7 @@ window.onload = function () {
                         640, 1024, 128, 256
 
                     ],
-                    jump:[
+                    jump: [
                         768, 256, 128, 256
                     ]
 
@@ -75,7 +75,7 @@ window.onload = function () {
         }
 
         var background = (function () {
-            background = {
+            var background = {
                 init: function (stage) {
                     res = setBackgroundLayer(stage);
                     this.layer = res[0];
@@ -95,7 +95,7 @@ window.onload = function () {
                             CONSTS = {
                                 JUMP_HEIGHT: 150
                             },
-                            updatex = player.object.scale().x*1,
+                            updatex = player.object.scale().x * 1,
                             updatey = -5;
                         this.jumpStatus = true;
                         var elem = this;
@@ -138,12 +138,12 @@ window.onload = function () {
                     background.jump(this);
                 },
                 move: function (background, direction) {
-                    if(this.object.scale().x !== direction){
+                    if (this.object.scale().x !== direction) {
                         this.object.stop();
-                        this.object.setX(this.object.getX() -  direction *128);
+                        this.object.setX(this.object.getX() - direction * 128);
                         this.layer.draw();
 
-                        this.object.scale({x:direction,y:1});
+                        this.object.scale({x: direction, y: 1});
                         this.object.start();
                     }
                     if (this.object.animation() != 'walk') {
