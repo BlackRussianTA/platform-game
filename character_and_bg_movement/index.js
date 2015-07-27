@@ -140,7 +140,7 @@ window.onload = function () {
                 move: function (background, direction) {
                     if(this.object.scale().x !== direction){
                         this.object.stop();
-                        this.object.setX(this.object.getX() -  direction *256);
+                        this.object.setX(this.object.getX() -  direction *128);
                         this.layer.draw();
 
                         this.object.scale({x:direction,y:1});
@@ -230,13 +230,6 @@ window.onload = function () {
 			
         }
     };
-	
-	window.onkeyup=function(ev){
-		if(ev.keyCode===39){
-			window.clearTimeout(myVar);
-		}
-		
-	}
-	
+
 
 };
