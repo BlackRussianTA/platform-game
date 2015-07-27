@@ -132,41 +132,7 @@ window.onload = function () {
                     this.jumpStatus = false;
                     return this;
                 },
-                jump: function (player) {
-                    if (this.jumpStatus == false) {
-                        player.object.animation('jump');
-                        var x = this.object.fillPatternOffsetX(),
-                            y = this.object.fillPatternOffsetY(),
-                            originalPostion = {
-                                x: x,
-                                y: y
-                            },
-                            CONSTS = {
-                                JUMP_HEIGHT: constants.PLAYER_JUMP_HEIGHT
-                            },
-                            updatex = player.object.scale().x * 1,
-                            updatey = -5;
-                        this.jumpStatus = true;
-                        var elem = this;
 
-                        function performJump() {
-                            if (originalPostion.y - CONSTS.JUMP_HEIGHT > elem.object.fillPatternOffsetY()) {
-                                updatey *= -1;
-                            }
-                            elem.object.fillPatternOffsetX(elem.object.fillPatternOffsetX() + updatex);
-                            elem.object.fillPatternOffsetY(elem.object.fillPatternOffsetY() + updatey);
-                            elem.layer.draw();
-                            if (originalPostion.y > elem.object.fillPatternOffsetY()) {
-                                requestAnimationFrame(performJump);
-                            } else {
-                                elem.jumpStatus = false;
-                                player.object.animation('idle');
-                            }
-                        }
-
-                        performJump();
-                    }
-                },
                 move: function (x) {
                     this.object.fillPatternOffsetX(this.object.fillPatternOffsetX() + x);
                     this.layer.draw();
@@ -185,60 +151,12 @@ window.onload = function () {
                     this.objects = res[1];
                     return this;
                 },
-                jump: function (player) {
-
-                    if (this.jumpStatus == false) {
-                        var originalPosition = [];
-                        this.objects.forEach(function(obj){
-                            originalPosition.push({
-                                x: obj.getX(),
-                                y: obj.getY()
-                            });
-                        });
-                            CONSTS = {
-                                JUMP_HEIGHT: constants.PLAYER_JUMP_HEIGHT
-                            },
-                            updatex = player.object.scale().x * -1,
-                            updatey = 5;
-                        this.jumpStatus = true;
-                        var elem = this;
-
-                        function performJump() {
-                            if (originalPosition[0].y + CONSTS.JUMP_HEIGHT < elem.objects[0].getY()) {
-                                updatey *= -1;
-                            }
-                            elem.objects.forEach(function(obj){
-                                obj.setX(obj.getX() + updatex);
-                                obj.setY(obj.getY() + updatey);
-                            });
-                            elem.layer.draw();
-                            var collision = elem.player_collision_top(player);
-                            if(collision === true){
-                                console.log("collision")
-                            } else {
-                                console.log("not")
-                            }
-                            if (originalPosition[0].y < elem.objects[0].getY() && collision === false) {
-                                requestAnimationFrame(performJump);
-                            } else {
-                                elem.jumpStatus = false;
-                            }
-                        }
-
-                        performJump();
-                    }
-                },
                 player_collision_top: function(player){
                     var elem = this;
                     return this.objects.some(function (obj) {
-                        //console.log('player end: '+ (player.object.getX()  + player.width));
-                        //console.log('tile start: '+ (obj.getX()));
                         if(obj.getY() + 2.47058823529414 == player.object.getY() + player.height
                            && (player.object.getX() <= obj.getX() + elem.width)
                            && (player.object.getX() >= obj.getX())
-                            //&& (player.object.getX() - player.width/3 <= obj.getX() + elem.width)
-                            ////&& player.object.getX() + 128 <= obj.getX() + elem.width
-
                         ){
                             return true
                         }
@@ -282,9 +200,9 @@ window.onload = function () {
                                 JUMP_HEIGHT: constants.PLAYER_JUMP_HEIGHT
                             },
                             updateBgx = this.object.scale().x * 1,
-                            updateBgy = -5,
+                            updateBgy = -4,
                             updateGrx = this.object.scale().x * -1,
-                            updateGry = 5;
+                            updateGry = 4;
                         this.jumpStatus = true;
                         var elem = this;
 
@@ -302,11 +220,7 @@ window.onload = function () {
                             });
                             ground.layer.draw();
                             var collision = ground.player_collision_top(elem);
-                            if(collision === true){
-                                console.log("collision")
-                            } else {
-                                console.log("not")
-                            }
+
                             if (originalPositionBackground.y > background.object.fillPatternOffsetY() & collision === false ) {
                                 requestAnimationFrame(performJump);
                             } else {
@@ -348,17 +262,16 @@ window.onload = function () {
                 fall: function(background, ground){
                     var elem = this;
                     function performFall(){
-                        console.log(background.object.fillPatternOffsetY());
-                        background.object.fillPatternOffsetY(background.object.fillPatternOffsetY() + 5);
+                        background.object.fillPatternOffsetY(background.object.fillPatternOffsetY() + 4);
                         background.layer.draw();
                         ground.objects.forEach(function(obj){
 
-                            obj.setY(obj.getY() -5);
+                            obj.setY(obj.getY() -4);
                         });
                         ground.layer.draw();
 
                         var collision = ground.player_collision_top(elem);
-                        console.log("collision? "+ collision);
+
                         if(background.object.fillPatternOffsetY() >= 420){
                             alert("Game Over!");
                         }
@@ -456,8 +369,6 @@ window.onload = function () {
             game.playerMoveLeft();
         } else if (ev.keyCode === 39) {
             game.playerMoveRight();
-        } else {
-            player.fall(background, ground);
         }
     };
 };
