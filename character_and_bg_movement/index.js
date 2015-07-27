@@ -259,6 +259,7 @@ window.onload = function () {
             player = {
                 init: function (stage, width, height) {
                     res = setPlayerLayer(stage);
+                    this.jumpStatus = false;
                     this.height = height;
                     this.width = width;
                     this.layer = res[0];
@@ -266,8 +267,55 @@ window.onload = function () {
                     return this;
                 },
                 jump: function (background, ground) {
-                    background.jump(this);
-                    ground.jump(this);
+                    if (this.jumpStatus == false) {
+                        this.object.animation('jump');
+                        var originalPositionBackground = {
+                                x: background.object.fillPatternOffsetX(),
+                                y: background.object.fillPatternOffsetY()
+                            };
+                        var originalPostionGround = {
+                            x: ground.objects[0].getX(),
+                            y: ground.objects[0].getY()
+                        },
+                            CONSTS = {
+                                JUMP_HEIGHT: constants.PLAYER_JUMP_HEIGHT
+                            },
+                            updateBgx = this.object.scale().x * 1,
+                            updateBgy = -5,
+                            updateGrx = this.object.scale().x * -1,
+                            updateGry = 5;
+                        this.jumpStatus = true;
+                        var elem = this;
+
+                        function performJump() {
+                            if (originalPositionBackground.y - CONSTS.JUMP_HEIGHT > background.object.fillPatternOffsetY()) {
+                                updateBgy *= -1;
+                                updateGry *= -1;
+                            }
+                            background.object.fillPatternOffsetX(background.object.fillPatternOffsetX() + updateBgx);
+                            background.object.fillPatternOffsetY(background.object.fillPatternOffsetY() + updateBgy);
+                            background.layer.draw();
+                            ground.objects.forEach(function(obj){
+                                obj.setX(obj.getX() + updateGrx);
+                                obj.setY(obj.getY() + updateGry);
+                            });
+                            ground.layer.draw();
+                            var collision = ground.player_collision_top(elem);
+                            if(collision === true){
+                                console.log("collision")
+                            } else {
+                                console.log("not")
+                            }
+                            if (originalPositionBackground.y > background.object.fillPatternOffsetY() & collision === false ) {
+                                requestAnimationFrame(performJump);
+                            } else {
+                                elem.jumpStatus = false;
+                                elem.object.animation('idle');
+                            }
+                        }
+
+                        performJump();
+                    }
                 },
                 move: function (background, ground,direction) {
                     if (this.object.scale().x !== direction) {
