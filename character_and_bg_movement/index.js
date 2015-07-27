@@ -155,8 +155,8 @@ window.onload = function () {
                     var elem = this;
                     return this.objects.some(function (obj) {
                         if(obj.getY() + 2.47058823529414 == player.object.getY() + player.height
-                           && (player.object.getX() <= obj.getX() + elem.width)
-                           && (player.object.getX() >= obj.getX())
+                            && (player.object.getX() <= obj.getX() + elem.width)
+                            && (player.object.getX() >= obj.getX())
                         ){
                             return true
                         }
@@ -189,20 +189,20 @@ window.onload = function () {
                     if (this.jumpStatus == false) {
                         this.object.animation('jump');
                         var originalPositionBackground = {
-                                x: background.object.fillPatternOffsetX(),
-                                y: background.object.fillPatternOffsetY()
-                            };
+                            x: background.object.fillPatternOffsetX(),
+                            y: background.object.fillPatternOffsetY()
+                        };
                         var originalPostionGround = {
-                            x: ground.objects[0].getX(),
-                            y: ground.objects[0].getY()
-                        },
+                                x: ground.objects[0].getX(),
+                                y: ground.objects[0].getY()
+                            },
                             CONSTS = {
                                 JUMP_HEIGHT: constants.PLAYER_JUMP_HEIGHT
                             },
                             updateBgx = this.object.scale().x * 1,
-                            updateBgy = -4,
+                            updateBgy = -5,
                             updateGrx = this.object.scale().x * -1,
-                            updateGry = 4;
+                            updateGry = 5;
                         this.jumpStatus = true;
                         var elem = this;
 
@@ -262,11 +262,11 @@ window.onload = function () {
                 fall: function(background, ground){
                     var elem = this;
                     function performFall(){
-                        background.object.fillPatternOffsetY(background.object.fillPatternOffsetY() + 4);
+                        background.object.fillPatternOffsetY(background.object.fillPatternOffsetY() + 5);
                         background.layer.draw();
                         ground.objects.forEach(function(obj){
 
-                            obj.setY(obj.getY() -4);
+                            obj.setY(obj.getY() -5);
                         });
                         ground.layer.draw();
 

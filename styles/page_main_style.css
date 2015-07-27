@@ -15,7 +15,7 @@ body, div, canvas, button, input, {
 body {
     text-align: center;
     font-family: iceCream;
-    background-color: rgba(255, 255, 170, 1);
+    background-color: rgba(255, 255, 255, 0.6);
 }
 
 #wrapper {
