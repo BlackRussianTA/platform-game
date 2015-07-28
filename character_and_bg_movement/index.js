@@ -32,10 +32,19 @@ window.onload = function () {
             GROUND_IMAGE: 'images/Ground/spritesheet_ground.png',
             PLAYER_IMAGE: 'images/Players/spritesheet_players.png',
             PLAYER_JUMP_HEIGHT: 210,
+            BOTTOM_LINE: 250,
             BACKGROUND_INITIAL_OFFSET_X: 10,
-            BACKGROUND_INITIAL_OFFSET_Y: 100,
-            PLAYER_MOVE_SPEED: 5
+            BACKGROUND_INITIAL_OFFSET_Y: -100,
+            PLAYER_MOVE_SPEED: 5,
+            PLAYER_JUMP_SPEED: 5,
+            LAYER_SCALE: 0.5
+
         };
+
+        function scaleLayer(layer){
+            layer.scaleX(constants.LAYER_SCALE);
+            layer.scaleY(constants.LAYER_SCALE);
+        }
 
         function setBackgroundLayer(stage) {
             var layer = new Kinetic.Layer();
@@ -62,6 +71,7 @@ window.onload = function () {
 // each platforms element has x, y and platform type name
         function setGroundLayer(stage, platforms) {
             var layer = new Kinetic.Layer();
+            scaleLayer(layer);
             var objects = [];
             platforms.forEach(function(elem){
                 var imageObj = new Image();
@@ -83,20 +93,22 @@ window.onload = function () {
                     layer.add(ground);
                     stage.add(layer);
                 };
-                objects.push(ground)
+                objects.push(ground);
+
             });
             return [layer, objects]
         }
 
         function setPlayerLayer(stage) {
             var layer = new Kinetic.Layer();
+            scaleLayer(layer);
 
             var imageObj = new Image();
 
             imageObj.src = constants.PLAYER_IMAGE;
             var player = new Kinetic.Sprite({
-                x: stage.getWidth() / 2.3,
-                y: stage.height() / 3.4,
+                x: stage.getWidth() - stage.width()/5,
+                y: stage.height() -  stage.height()/2,
                 image: imageObj,
                 animation: 'idle',
                 animations: {
@@ -154,7 +166,10 @@ window.onload = function () {
                 player_collision_top: function(player){
                     var elem = this;
                     return this.objects.some(function (obj) {
-                        if(obj.getY() + 2.47058823529414 == player.object.getY() + player.height
+                        console.log('tile top: '+obj.getY());
+                        console.log('player bottom: '+(player.object.getY()  + player.height));
+
+                        if(obj.getY() == player.object.getY() + player.height
                             && (player.object.getX() <= obj.getX() + elem.width)
                             && (player.object.getX() >= obj.getX())
                         ){
@@ -175,7 +190,7 @@ window.onload = function () {
         }());
 
         var player = (function () {
-            player = {
+            var player = {
                 init: function (stage, width, height) {
                     res = setPlayerLayer(stage);
                     this.jumpStatus = false;
@@ -225,7 +240,7 @@ window.onload = function () {
                                 requestAnimationFrame(performJump);
                             } else {
                                 if(collision === false){
-                                    player.fall(background, ground);
+                                    elem.fall(background, ground);
                                 }
                                 elem.jumpStatus = false;
                                 elem.object.animation('idle');
@@ -234,6 +249,29 @@ window.onload = function () {
 
                         performJump();
                     }
+                },
+                fall: function(background, ground){
+
+                    var elem = this;
+                    function performFall(){
+                        background.object.fillPatternOffsetY(background.object.fillPatternOffsetY() + 5);
+                        background.layer.draw();
+                            ground.layer.setY(ground.layer.getY() -5);
+                        ground.layer.draw();
+
+
+                        var collision = ground.player_collision_top(elem);
+
+                        if(background.object.fillPatternOffsetY() >= constants.BOTTOM_LINE){
+                            elem.object.visible(false);
+                            elem.layer.draw();
+                        }
+                        if (background.object.fillPatternOffsetY() <= constants.BOTTOM_LINE && collision === false) {
+                            requestAnimationFrame(performFall);
+                        }
+                    }
+
+                    performFall();
                 },
                 move: function (background, ground,direction) {
                     if (this.object.scale().x !== direction) {
@@ -257,30 +295,6 @@ window.onload = function () {
                     if(collision === false){
                         this.fall(background, ground)
                     }
-                    console.log(collision);
-                },
-                fall: function(background, ground){
-                    var elem = this;
-                    function performFall(){
-                        background.object.fillPatternOffsetY(background.object.fillPatternOffsetY() + 5);
-                        background.layer.draw();
-                        ground.objects.forEach(function(obj){
-
-                            obj.setY(obj.getY() -5);
-                        });
-                        ground.layer.draw();
-
-                        var collision = ground.player_collision_top(elem);
-
-                        if(background.object.fillPatternOffsetY() >= 420){
-                            alert("Game Over!");
-                        }
-                        if (background.object.fillPatternOffsetY() <= 420 && collision === false) {
-                            requestAnimationFrame(performFall);
-                        }
-                    }
-
-                    performFall();
                 }
             };
             return player
@@ -345,10 +359,12 @@ window.onload = function () {
     var stage = module.getStage('kinetic-canvas', 800, 600);
     var background = module.getBackground(stage);
     var setup = [
-        {'x': 300, 'y': 430,'type': 'cliff_left'},
-        {'x': 428, 'y': 430,'type': 'cliff_right'},
-        {'x': 100, 'y': 280,'type': 'cliff_left'},
-        {'x': 228, 'y': 280,'type': 'cliff_right'},
+        {'x': 550, 'y': 556,'type': 'cliff_left'},
+        {'x': 676, 'y': 556,'type': 'cliff_right'},
+        {'x': 850, 'y': 556,'type': 'cliff_left'},
+        {'x': 976, 'y': 556,'type': 'cliff_right'},
+        {'x': 400, 'y': 356,'type': 'cliff_left'},
+        {'x': 526, 'y': 356,'type': 'cliff_right'},
     ];
     var ground;
     var player;
