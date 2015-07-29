@@ -11,7 +11,7 @@
         CANVAS_HEIGHT = 540,                                               // ... and 4:3 w:h ratio
         HORIZON_HEIGHT = CANVAS_HEIGHT / 5,                                // how much ground to show below the tower
         PIXELS_IN_METER = CANVAS_HEIGHT / 20,                              // how many pixels represent 1 meter
-        COLUMN_WIDTH = PIXELS_IN_METER * 3,                                // 2D column width
+        COL_WIDTH = PIXELS_IN_METER * 3,                                   // 2D column width
         ROW_HEIGHT = PIXELS_IN_METER,                                      // 2D row height
         ROW_SURFACE = ROW_HEIGHT * 0.3,                                    // amount of row considered 'near' enough to surface to allow jumping onto that row (instead of bouncing off again)
         PLAYER_WIDTH = PIXELS_IN_METER * 1.5,                              // player logical width
@@ -26,7 +26,7 @@
         FALLING_JUMP = FRAMES_PER_SECOND / 5,                              // player allowed to jump for 1/5 second after falling off a platform
         COIN = { WIDTH: ROW_HEIGHT, HEIGHT: ROW_HEIGHT },                  // logical size of coin
         DIRECTION = { NONE: 0, LEFT: 1, RIGHT: 2 },                        // useful enum for declaring an abstract direction
-        STEP = { FRAMES: 8, W: COLUMN_WIDTH / 10, H: ROW_HEIGHT },         // attributes of player stepping up
+        STEP = { FRAMES: 8, W: COL_WIDTH / 10, H: ROW_HEIGHT },            // attributes of player stepping up
         KEY = { SPACE: 32, LEFT: 37, RIGHT: 39 },                          // input key codes
         IMAGES = ['ground', 'player', 'monster', 'coins'],                 // sprite image files for loading
         PLAYER = {
@@ -44,7 +44,7 @@
                 w: 1.5 * PIXELS_IN_METER,
                 h: 1.5 * PIXELS_IN_METER,
                 speed: 4 * PIXELS_IN_METER,
-                dir: 'up',
+                direction: 'up',
                 vertical: true,
                 horizontal: false,
                 animation: {
@@ -60,7 +60,7 @@
                 w: 1.5 * PIXELS_IN_METER,
                 h: 1.0 * PIXELS_IN_METER,
                 speed: 5 * PIXELS_IN_METER,
-                dir: 'left',
+                direction: 'left',
                 vertical: false,
                 horizontal: true,
                 animation: {
@@ -76,7 +76,7 @@
                 w: 1.5 * PIXELS_IN_METER,
                 h: 1.0 * PIXELS_IN_METER,
                 speed: 4 * PIXELS_IN_METER,
-                dir: 'right',
+                direction: 'right',
                 vertical: false,
                 horizontal: true,
                 animation: {
@@ -92,7 +92,7 @@
                 w: 1.5 * PIXELS_IN_METER,
                 h: 1.0 * PIXELS_IN_METER,
                 speed: 2 * PIXELS_IN_METER,
-                dir: 'left',
+                direction: 'left',
                 vertical: false,
                 horizontal: true,
                 animation: {
@@ -109,9 +109,9 @@
 
     function normalizex(x) { return Game.Math.normalize(x, 0, tower.w); }             // wrap x-coord around to stay within tower boundary
     function normalizeColumn(col) { return Game.Math.normalize(col, 0, tower.cols); } // wrap column  around to stay within tower boundary
-    function x2col(x) { return Math.floor(normalizex(x) / COLUMN_WIDTH); }            // convert x-coord to tower column index
+    function x2col(x) { return Math.floor(normalizex(x) / COL_WIDTH); }            // convert x-coord to tower column index
     function y2row(y) { return Math.floor(y / ROW_HEIGHT); }                          // convert y-coord to tower row    index
-    function col2x(col) { return col * COLUMN_WIDTH; }                                // convert tower column index to x-coord
+    function col2x(col) { return col * COL_WIDTH; }                                // convert tower column index to x-coord
     function row2y(row) { return row * ROW_HEIGHT; }                                  // convert tower row    index to y-coord
     function x2a(x) { return 360 * (normalizex(x) / tower.w); }                       // convert x-coord to an angle around the tower
     function tx(x, r) {
@@ -144,7 +144,7 @@
             this.cols = level.map[0].length;
             this.ir = CANVAS_WIDTH / 2;         // inner radius (walls)
             this.or = this.ir * 1.2;            // outer radius (walls plus platforms)
-            this.w = this.cols * COLUMN_WIDTH;
+            this.w = this.cols * COL_WIDTH;
             this.h = this.rows * ROW_HEIGHT;
             this.map = this.createMap(level.map);
             this.ground = { platform: true };
@@ -205,8 +205,8 @@
             this.nx = type.nx * type.w;
             this.ny = type.ny * type.h;
             this.type = type;
-            this[type.dir] = true;
-            this.animation = type.animation[type.dir];
+            this[type.direction] = true;
+            this.animation = type.animation[type.direction];
 
             if (type.vertical) {
                 this.minrow = row;
@@ -429,10 +429,6 @@
             }
 
             if (this.falling && (this.fallingJump === 0) && (this.y < 0)) {
-                this.falling = false;
-                this.input.left = false;
-                this.input.right = false;
-                this.y = 0;
                 this.dy = 0;
             }
         },
@@ -615,8 +611,8 @@
             this.input.jump = false;
         },
 
-        startSteppingUp: function (dir) {
-            this.stepping = dir;
+        startSteppingUp: function (direction) {
+            this.stepping = direction;
             this.stepCount = STEP.FRAMES;
             return false; // NOT considered a collision
         },
@@ -683,7 +679,7 @@
             this.ground = this.createGround();
             this.score = document.getElementById('score');
             this.vscore = 0;
-            this.platformWidth = COLUMN_WIDTH;
+            this.platformWidth = COL_WIDTH;
 
             return this;
         },
@@ -776,7 +772,7 @@
 
         //-------------------------------------------------------------------------
 
-        renderQuadrant: function (ctx, min, max, dir) {
+        renderQuadrant: function (ctx, min, max, direction) {
             var r, y, cell,
                 rmin = Math.max(0, y2row(camera.ry - HORIZON_HEIGHT) - 1),
                 rmax = Math.min(tower.rows - 1, rmin + (CANVAS_HEIGHT / ROW_HEIGHT + 1)),
@@ -792,7 +788,7 @@
                     if (cell.monster)
                         this.renderMonster(ctx, c, y, cell.monster);
                 }
-                c = normalizeColumn(c + dir);
+                c = normalizeColumn(c + direction);
             }
         },
 
