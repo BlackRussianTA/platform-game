@@ -17,7 +17,7 @@
         PLAYER_WIDTH = PIXELS_IN_METER * 1.5,                              // player logical width
         PLAYER_HEIGHT = PIXELS_IN_METER * 2,                               // player logical height
         GROUND_SPEED = 2,                                                  // how fast ground scrolls left-right
-        GRAVITY = 9.8 * 1.5,                                               // (exagerated) gravity
+        GRAVITY = 9.8 * 1.5,                                               // gravity
         MAX_DELTA_X = 10,                                                  // player max horizontal speed (meters per second)
         MAX_DELTA_Y = (ROW_SURFACE * FRAMES_PER_SECOND / PIXELS_IN_METER), // player max vertical speed (meters per second) - ENSURES CANNOT FALL THROUGH PLATFORM SURFACE
         CLIMBING_DELTA_Y = 8,                                              // player climbing speed (meters per second)
@@ -25,21 +25,17 @@
         FRICTION = 1 / 8,                                                  // player take 1/8 second to stop from maxDeltaX (horizontal friction)
         IMPULSE = 15 * FRAMES_PER_SECOND,                                  // player jump impulse
         FALLING_JUMP = FRAMES_PER_SECOND / 5,                              // player allowed to jump for 1/5 second after falling off a platform
-        LADDER_EDGE = 0.6,                                                 // how far from ladder center (60%) is ladder's true collision boundary, e.g. you fall off if you get more than 60% away from center of ladder
         COIN = { W: ROW_HEIGHT, H: ROW_HEIGHT },                           // logical size of coin
         DIR = { NONE: 0, LEFT: 1, RIGHT: 2, UP: 3, DOWN: 4 },              // useful enum for declaring an abstract direction
         STEP = { FRAMES: 8, W: COLUMN_WIDTH / 10, H: ROW_HEIGHT },         // attributes of player stepping up
         KEY = { SPACE: 32, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40 },        // input key codes
-        IMAGES = ['ground', 'ladder', 'player', 'monster', 'coins'],       // sprite image files for loading
+        IMAGES = ['ground', 'player', 'monster', 'coins'],                 // sprite image files for loading
         PLAYER = {
-            DEBUG: false,                                                    // enable player debug rendering (bounding box and collision points)
-            RIGHT: { x: 0, y: 0, w: 72, h: 96, frames: 11, fps: 30 },       // animation - player running right
-            STAND: { x: 792, y: 0, w: 72, h: 96, frames: 1, fps: 30 },      // animation - player standing still
-            LEFT: { x: 1224, y: 0, w: 72, h: 96, frames: 11, fps: 30 },     // animation - player running left
-            BACK: { x: 2016, y: 0, w: 72, h: 96, frames: 1, fps: 30 },      // animation - player standing still with back to camera (on ladder but not moving)
-            CLIMB: { x: 2016, y: 0, w: 72, h: 96, frames: 11, fps: 30 },    // animation - player climbing ladder
-            HURTL: { x: 1080, y: 0, w: 72, h: 96, frames: 1, fps: 10 },     // animation - player hurt while running left
-            HURTR: { x: 1152, y: 0, w: 72, h: 96, frames: 1, fps: 10 }      // animation - player hurt while running right
+            RIGHT: { x: 0, y: 0, w: 72, h: 96, frames: 11, fps: 30 },      // animation - player running right
+            STAND: { x: 792, y: 0, w: 72, h: 96, frames: 1, fps: 30 },     // animation - player standing still
+            LEFT: { x: 1224, y: 0, w: 72, h: 96, frames: 11, fps: 30 },    // animation - player running left
+            HURTL: { x: 1080, y: 0, w: 72, h: 96, frames: 1, fps: 10 },    // animation - player hurt while running left
+            HURTR: { x: 1152, y: 0, w: 72, h: 96, frames: 1, fps: 10 }     // animation - player hurt while running right
         },
         MONSTERS = [
             {
@@ -126,8 +122,10 @@
         }
         return x;
     } // transform x-coord for rendering
-    function ty(y) { return CANVAS_HEIGHT - HORIZON_HEIGHT - (y - camera.ry); }                     // transform y-coord for rendering
-    function nearRowSurface(y, row) { return y > (row2y(row + 1) - ROW_SURFACE); }    // is y-coord "near" the surface of a tower row
+    function ty(y) { return CANVAS_HEIGHT - HORIZON_HEIGHT - (y - camera.ry); }       // transform y-coord for rendering
+    function nearRowSurface(y, row) {                                                 // is y-coord "near" the surface of a tower row
+        return y > (row2y(row + 1) - ROW_SURFACE);
+    }
 
     //===========================================================================
     // TOWER
@@ -159,25 +157,28 @@
         //-------------------------------------------------------------------------
 
         getCell: function (row, col) {
-            if (row < 0)
+            if (row < 0) {
                 return this.ground;
-            else if (row >= this.rows)
+            }
+
+            if (row >= this.rows) {
                 return this.air;
-            else
-                return this.map[row][normalizeColumn(col)];
+            }
+
+            return this.map[row][normalizeColumn(col)];
         },
 
         //-------------------------------------------------------------------------
 
         createMap: function (source) {
             var row, col, cell, map = [];
-            for (row = 0 ; row < this.rows ; row++) {
+            for (row = 0; row < this.rows; row += 1) {
                 map[row] = [];
-                for (col = 0 ; col < this.cols ; col++) {
+                for (col = 0; col < this.cols; col += 1) {
                     cell = source[row][col];
                     map[row][col] = {
-                        platform: (cell === 'X'),
-                        coin: (cell === 'o')
+                        platform: (cell === "X"),
+                        coin: (cell === "o")
                     };
                 }
             }
@@ -211,9 +212,9 @@
             if (type.vertical) {
                 this.minrow = row;
                 this.maxrow = row;
-                while ((this.minrow > 0) && !tower.map[this.minrow - 1][col].platform && !tower.map[this.minrow - 1][col].ladder)
+                while ((this.minrow > 0) && !tower.map[this.minrow - 1][col].platform)
                     this.minrow--;
-                while ((this.maxrow < tower.rows - 1) && !tower.map[this.maxrow + 1][col].platform && !tower.map[this.maxrow + 1][col].ladder)
+                while ((this.maxrow < tower.rows - 1) && !tower.map[this.maxrow + 1][col].platform)
                     this.maxrow++;
                 this.miny = row2y(this.minrow) + this.ny;
                 this.maxy = row2y(this.maxrow + 1) + this.ny - this.h;
@@ -222,9 +223,9 @@
             if (type.horizontal) {
                 this.mincol = col;
                 this.maxcol = col;
-                while ((this.mincol != normalizeColumn(col + 1)) && !tower.getCell(row, this.mincol - 1).platform && !tower.getCell(row, this.mincol - 1).ladder && tower.getCell(row - 1, this.mincol - 1).platform)
+                while ((this.mincol != normalizeColumn(col + 1)) && !tower.getCell(row, this.mincol - 1).platform && tower.getCell(row - 1, this.mincol - 1).platform)
                     this.mincol = normalizeColumn(this.mincol - 1);
-                while ((this.maxcol != normalizeColumn(col - 1)) && !tower.getCell(row, this.maxcol + 1).platform && !tower.getCell(row, this.maxcol + 1).ladder && tower.getCell(row - 1, this.maxcol + 1).platform)
+                while ((this.maxcol != normalizeColumn(col - 1)) && !tower.getCell(row, this.maxcol + 1).platform && tower.getCell(row - 1, this.maxcol + 1).platform)
                     this.maxcol = normalizeColumn(this.maxcol + 1);
                 this.minx = col2x(this.mincol) - this.nx;
                 this.maxx = col2x(this.maxcol + 1) - this.nx - this.w;
@@ -378,7 +379,7 @@
                 bottomLeft: { x: -this.w / 4, y: 0 },
                 bottomRight: { x: this.w / 4, y: 0 },
                 underLeft: { x: -this.w / 4, y: -1 },
-                underRight: { x: this.w / 4, y: -1 },
+                underRight: { x: this.w / 4, y: -1 }
             };
         },
 
@@ -390,7 +391,7 @@
                 wasright = this.deltaX > 0,
                 falling = this.falling,
                 friction = this.friction * (this.falling ? 0.5 : 1),
-                accel = this.accel * (this.falling || this.climbing ? 0.5 : 1);
+                accel = this.accel * (this.falling ? 0.5 : 1);
 
             if (this.stepping)
                 return this.stepUp();
@@ -399,16 +400,6 @@
 
             this.ddx = 0;
             this.ddy = falling ? -this.gravity : 0;
-
-            if (this.climbing) {
-                this.ddy = 0;
-                if (this.input.up)
-                    this.dy = this.climbdy;
-                else if (this.input.down)
-                    this.dy = -this.climbdy;
-                else
-                    this.dy = 0;
-            }
 
             if (this.input.left)
                 this.ddx = this.ddx - accel;
@@ -430,18 +421,14 @@
             }
 
             // clamp deltaX at zero to prevent friction from making us jiggle side to side
-            if ((wasleft && (this.deltaX > 0)) ||
-                (wasright && (this.deltaX < 0))) {
+            if ((wasleft && (this.deltaX > 0)) || (wasright && (this.deltaX < 0))) {
                 this.deltaX = 0;
             }
 
             // if falling, track short period of time during which we're falling but can still jump
-            if (this.falling && (this.fallingJump > 0))
+            if (this.falling && (this.fallingJump > 0)) {
                 this.fallingJump = this.fallingJump - 1;
-
-            // debug information
-            this.debug = Math.floor(this.x) + ", " + Math.floor(this.y) + ", " + Math.floor(this.deltaX) + ", " + Math.floor(this.dy) + (this.falling ? " FALLING " : "");
-
+            }
         },
 
         updatePosition: function (dt) {
@@ -479,9 +466,9 @@
                 Game.animate(FRAMES_PER_SECOND, this, PLAYER.CLIMB);
             else if (this.climbing)
                 Game.animate(FRAMES_PER_SECOND, this, PLAYER.BACK);
-            else if (this.input.left || (this.stepping == DIR.LEFT))
+            else if (this.input.left || (this.stepping === DIR.LEFT))
                 Game.animate(FRAMES_PER_SECOND, this, PLAYER.LEFT);
-            else if (this.input.right || (this.stepping == DIR.RIGHT))
+            else if (this.input.right || (this.stepping === DIR.RIGHT))
                 Game.animate(FRAMES_PER_SECOND, this, PLAYER.RIGHT);
             else
                 Game.animate(FRAMES_PER_SECOND, this, PLAYER.STAND);
@@ -525,17 +512,11 @@
             if (fallingDown && br.blocked && !mr.blocked && !tr.blocked && nearRowSurface(this.y + br.y, br.row))
                 return this.collideDown(br);
 
-            //if (fallingDown && ld.ladder && !lu.ladder)
-            //    return this.collideDown(ld);
-
             if (fallingUp && tl.blocked && !ml.blocked && !bl.blocked)
                 return this.collideUp(tl);
 
             if (fallingUp && tr.blocked && !mr.blocked && !br.blocked)
                 return this.collideUp(tr);
-
-            //if (climbingDown && ld.blocked)
-            //    return this.stopClimbing(ld);
 
             if (runningRight && tr.blocked && !tl.blocked)
                 return this.collide(tr);
@@ -563,18 +544,8 @@
                     return this.startSteppingUp(DIR.LEFT);
             }
 
-            //var onLadder = (lu.ladder || ld.ladder) && nearColCenter(this.x, lu.col, LADDER_EDGE);
-
-            // check to see if we are now falling or climbing
-            //if (!climbing && onLadder && ((lu.ladder && this.input.up) || (ld.ladder && this.input.down)))
-            //    return this.startClimbing();
-            //else
             if (!falling && !ul.blocked && !ur.blocked)
                 return this.startFalling(true);
-
-            // check to see if we have fallen off a ladder
-            //if (climbing && !onLadder)
-            //    return this.stopClimbing();
 
             if (!this.hurting && (tl.monster || tr.monster || ml.monster || mr.monster || bl.monster || br.monster))
                 return this.hitMonster();
@@ -642,6 +613,26 @@
             this.input.jump = false;
         },
 
+        startSteppingUp: function (dir) {
+            this.stepping = dir;
+            this.stepCount = STEP.FRAMES;
+            return false; // NOT considered a collision
+        },
+
+        stepUp: function () {
+
+            var left = (this.stepping == DIR.LEFT),
+                dx = STEP.W / STEP.FRAMES,
+                dy = STEP.H / STEP.FRAMES;
+
+            this.dx = 0;
+            this.dy = 0;
+            this.x = normalizex(this.x + (left ? -dx : dx));
+            this.y = this.y + dy;
+
+            if (--(this.stepCount) == 0)
+                this.stepping = DIR.NONE;
+        },
 
         hitMonster: function () {
             this.hurting = true;
@@ -684,12 +675,11 @@
 
         init: function (images) {
             this.images = images;
-            this.canvas = Game.Canvas.init(Dom.get('canvas'), CANVAS_WIDTH, CANVAS_HEIGHT);
+            this.canvas = Game.Canvas.init(document.getElementById('canvas'), CANVAS_WIDTH, CANVAS_HEIGHT);
             this.ctx = this.canvas.getContext('2d');
             this.stars = this.createStars();
             this.ground = this.createGround();
-            this.debug = Dom.get('debug');
-            this.score = Dom.get('score');
+            this.score = document.getElementById('score');
             this.vscore = 0;
             this.platformWidth = COLUMN_WIDTH;
 
@@ -717,9 +707,6 @@
             this.renderPlayer(this.ctx);
             this.renderScore(this.ctx);
             this.ctx.restore();
-
-            // Dom.set(debug, player.debug); // DEBUG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
         },
 
         //-------------------------------------------------------------------------
@@ -792,14 +779,12 @@
                 rmin = Math.max(0, y2row(camera.ry - HORIZON_HEIGHT) - 1),
                 rmax = Math.min(tower.rows - 1, rmin + (CANVAS_HEIGHT / ROW_HEIGHT + 1)),
                 c = min;
-            while (c != max) {
+            while (c !== max) {
                 for (r = rmin ; r <= rmax ; r++) {
                     y = ty(r * ROW_HEIGHT);
                     cell = tower.getCell(r, c);
                     if (cell.platform)
                         this.renderPlatform(ctx, c, y);
-                        //else if (cell.ladder)
-                        //    this.renderLadder(ctx, c, y);
                     else if (cell.coin)
                         this.renderCoin(ctx, c, y);
                     if (cell.monster)
@@ -861,18 +846,6 @@
 
         renderPlayer: function (ctx) {
             ctx.drawImage(this.images.player, player.animation.x + (player.animationFrame * player.animation.w), player.animation.y, player.animation.w, player.animation.h, tx(player.rx, tower.ir) - player.w / 2, ty(player.ry) - player.h, player.w, player.h);
-            if (PLAYER.DEBUG) {
-                ctx.strokeStyle = "#000000";
-                ctx.lineWidth = 1;
-                ctx.strokeRect(tx(player.rx, tower.ir) - player.w / 2, ty(player.ry + player.h), player.w, player.h);
-                ctx.fillStyle = "#800000";
-                ctx.fillRect(tx(player.rx, tower.ir) + player.collision.topLeft.x, ty(player.ry + player.collision.topLeft.y), 5, 5);
-                ctx.fillRect(tx(player.rx, tower.ir) + player.collision.topRight.x, ty(player.ry + player.collision.topRight.y), -5, 5);
-                ctx.fillRect(tx(player.rx, tower.ir) + player.collision.middleLeft.x, ty(player.ry + player.collision.middleLeft.y), 5, 5);
-                ctx.fillRect(tx(player.rx, tower.ir) + player.collision.middleRight.x, ty(player.ry + player.collision.middleRight.y), -5, 5);
-                ctx.fillRect(tx(player.rx, tower.ir) + player.collision.bottomLeft.x, ty(player.ry + player.collision.bottomLeft.y), 5, -5);
-                ctx.fillRect(tx(player.rx, tower.ir) + player.collision.bottomRight.x, ty(player.ry + player.collision.bottomRight.y), -5, -5);
-            }
         },
 
         //-------------------------------------------------------------------------
@@ -880,7 +853,7 @@
         renderScore: function (ctx) {
             if (player.score > this.vscore) {
                 this.vscore = this.vscore + 2;
-                Dom.set(score, this.vscore);
+                score.innerHTML = this.vscore;
             }
         },
 
@@ -994,16 +967,15 @@
 
                 // Add event listeners for 'keydown' and 'keyup'
 
-                Dom.on(document, 'keydown', function (event) {
+                document.addEventListener('keydown', function (event) {
                     return onkey(event, event.keyCode, true);
                 }, false);
 
-                Dom.on(document, 'keyup', function (event) {
+                document.addEventListener('keyup', function (event) {
                     return onkey(event, event.keyCode, false);
                 }, false);
             });
-        }
-        );
+        });
     }
 
     //===========================================================================

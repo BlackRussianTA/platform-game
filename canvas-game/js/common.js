@@ -14,25 +14,6 @@ if (!window.requestAnimationFrame) { // http://paulirish.com/2011/requestanimati
 }
 
 //-------------------------------------------------------------------------
-// SIMPLE DOM UTILITIES
-//-------------------------------------------------------------------------
-
-var Dom = {
-
-    get: function (id) {
-        return ((id instanceof HTMLElement) || (id === document)) ? id : document.getElementById(id);
-    },
-
-    set: function (id, html) {
-        Dom.get(id).innerHTML = html;
-    },
-
-    on: function (element, type, fn, capture) {
-        Dom.get(element).addEventListener(type, fn, capture);
-    }
-}
-
-//-------------------------------------------------------------------------
 // GAME LOOP
 //-------------------------------------------------------------------------
 
@@ -45,11 +26,9 @@ var Game = {
             last = Game.Math.timestamp(),
             oneFrameTime = 1 / options.fps,
             update = options.update,
-            render = options.render;//,
-        fpsmeter = new FPSMeter(options.fpsmeter || { decimals: 0, graph: true, theme: 'dark', left: '5px' });
+            render = options.render;
 
         function frame() {
-            fpsmeter.tickStart();
             now = Game.Math.timestamp();
             deltaTime = deltaTime + Math.min(1, (now - last) / 1000);
             while (deltaTime > oneFrameTime) {
@@ -58,7 +37,6 @@ var Game = {
             }
             render(deltaTime);
             last = now;
-            fpsmeter.tick();
             requestAnimationFrame(frame, options.canvas);
         }
 
@@ -138,7 +116,7 @@ Game.Load = {
 
             result[name] = document.createElement('img');
 
-            Dom.on(result[name], 'load', onload);
+            result[name].addEventListener('load', onload);
 
             result[name].src = "images/" + name + ".png";
         }

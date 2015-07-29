@@ -44,7 +44,6 @@
     <Content Include="images\coin.png" />
     <Content Include="images\coins.png" />
     <Content Include="images\ground.png" />
-    <Content Include="images\ladder.png" />
     <Content Include="images\monster.png" />
     <Content Include="images\monster\blocker1.png" />
     <Content Include="images\monster\blocker2.png" />
@@ -102,7 +101,6 @@
     <Content Include="images\player\38_climb.png" />
     <Content Include="index.html" />
     <Content Include="js\common.js" />
-    <Content Include="js\fpsmeter.min.js" />
     <Content Include="js\levels.js" />
     <Content Include="js\platform.js" />
     <Content Include="Web.config" />
