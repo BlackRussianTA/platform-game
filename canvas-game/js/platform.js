@@ -20,15 +20,14 @@
         GRAVITY = 9.8 * 1.5,                                               // gravity
         MAX_DELTA_X = 10,                                                  // player max horizontal speed (meters per second)
         MAX_DELTA_Y = (ROW_SURFACE * FRAMES_PER_SECOND / PIXELS_IN_METER), // player max vertical speed (meters per second) - ENSURES CANNOT FALL THROUGH PLATFORM SURFACE
-        CLIMBING_DELTA_Y = 8,                                              // player climbing speed (meters per second)
         ACCELERATION = 1 / 4,                                              // player take 1/4 second to reach maxDeltaX (horizontal acceleration)
         FRICTION = 1 / 8,                                                  // player take 1/8 second to stop from maxDeltaX (horizontal friction)
         IMPULSE = 15 * FRAMES_PER_SECOND,                                  // player jump impulse
         FALLING_JUMP = FRAMES_PER_SECOND / 5,                              // player allowed to jump for 1/5 second after falling off a platform
-        COIN = { W: ROW_HEIGHT, H: ROW_HEIGHT },                           // logical size of coin
-        DIR = { NONE: 0, LEFT: 1, RIGHT: 2, UP: 3, DOWN: 4 },              // useful enum for declaring an abstract direction
+        COIN = { WIDTH: ROW_HEIGHT, HEIGHT: ROW_HEIGHT },                  // logical size of coin
+        DIRECTION = { NONE: 0, LEFT: 1, RIGHT: 2 },                        // useful enum for declaring an abstract direction
         STEP = { FRAMES: 8, W: COLUMN_WIDTH / 10, H: ROW_HEIGHT },         // attributes of player stepping up
-        KEY = { SPACE: 32, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40 },        // input key codes
+        KEY = { SPACE: 32, LEFT: 37, RIGHT: 39 },                          // input key codes
         IMAGES = ['ground', 'player', 'monster', 'coins'],                 // sprite image files for loading
         PLAYER = {
             RIGHT: { x: 0, y: 0, w: 72, h: 96, frames: 11, fps: 30 },      // animation - player running right
@@ -358,11 +357,10 @@
             this.gravity = PIXELS_IN_METER * GRAVITY;
             this.maxDeltaX = PIXELS_IN_METER * MAX_DELTA_X;
             this.maxdy = PIXELS_IN_METER * MAX_DELTA_Y;
-            this.climbdy = PIXELS_IN_METER * CLIMBING_DELTA_Y;
             this.impulse = PIXELS_IN_METER * IMPULSE;
             this.accel = this.maxDeltaX / ACCELERATION;
             this.friction = this.maxDeltaX / FRICTION;
-            this.input = { left: false, right: false, up: false, down: false, jump: false, jumpAvailable: true };
+            this.input = { left: false, right: false, jump: false, jumpAvailable: true };
             this.collision = this.createCollisionPoints();
             this.animation = PLAYER.STAND;
             this.score = 0;
@@ -429,6 +427,14 @@
             if (this.falling && (this.fallingJump > 0)) {
                 this.fallingJump = this.fallingJump - 1;
             }
+
+            if (this.falling && (this.fallingJump === 0) && (this.y < 0)) {
+                this.falling = false;
+                this.input.left = false;
+                this.input.right = false;
+                this.y = 0;
+                this.dy = 0;
+            }
         },
 
         updatePosition: function (dt) {
@@ -462,13 +468,9 @@
         animate: function () {
             if (this.hurting)
                 Game.animate(FRAMES_PER_SECOND, this, this.hurtLeft ? PLAYER.HURTL : PLAYER.HURTR);
-            else if (this.climbing && (this.input.up || this.input.down || this.input.left || this.input.right))
-                Game.animate(FRAMES_PER_SECOND, this, PLAYER.CLIMB);
-            else if (this.climbing)
-                Game.animate(FRAMES_PER_SECOND, this, PLAYER.BACK);
-            else if (this.input.left || (this.stepping === DIR.LEFT))
+            else if (this.input.left || (this.stepping === DIRECTION.LEFT))
                 Game.animate(FRAMES_PER_SECOND, this, PLAYER.LEFT);
-            else if (this.input.right || (this.stepping === DIR.RIGHT))
+            else if (this.input.right || (this.stepping === DIRECTION.RIGHT))
                 Game.animate(FRAMES_PER_SECOND, this, PLAYER.RIGHT);
             else
                 Game.animate(FRAMES_PER_SECOND, this, PLAYER.STAND);
@@ -528,7 +530,7 @@
                 if (falling)
                     return this.collide(br);
                 else
-                    return this.startSteppingUp(DIR.RIGHT);
+                    return this.startSteppingUp(DIRECTION.RIGHT);
             }
 
             if (runningLeft && tl.blocked && !tr.blocked)
@@ -541,7 +543,7 @@
                 if (falling)
                     return this.collide(bl, true);
                 else
-                    return this.startSteppingUp(DIR.LEFT);
+                    return this.startSteppingUp(DIRECTION.LEFT);
             }
 
             if (!falling && !ul.blocked && !ur.blocked)
@@ -570,7 +572,7 @@
                 }
             }
             if (point.cell.coin) {
-                if (Game.Math.between(this.x + point.x, col2x(point.col + 0.5) - COIN.W / 2, col2x(point.col + 0.5) + COIN.W / 2) &&  // center point of column +/- COIN.W/2
+                if (Game.Math.between(this.x + point.x, col2x(point.col + 0.5) - COIN.WIDTH / 2, col2x(point.col + 0.5) + COIN.WIDTH / 2) &&  // center point of column +/- COIN.WIDTH/2
                     Game.Math.between(this.y + point.y, row2y(point.row), row2y(point.row + 1))) {
                     point.coin = true;
                 }
@@ -621,7 +623,7 @@
 
         stepUp: function () {
 
-            var left = (this.stepping == DIR.LEFT),
+            var left = (this.stepping === DIRECTION.LEFT),
                 dx = STEP.W / STEP.FRAMES,
                 dy = STEP.H / STEP.FRAMES;
 
@@ -631,7 +633,7 @@
             this.y = this.y + dy;
 
             if (--(this.stepCount) == 0)
-                this.stepping = DIR.NONE;
+                this.stepping = DIRECTION.NONE;
         },
 
         hitMonster: function () {
@@ -818,8 +820,8 @@
                 x = col2x(col + 0.5),
                 a = Game.Math.normalizeAngle180(x2a(x) - x2a(camera.rx)),
                 d = Math.floor(12 * Math.min(1, Math.abs(a / 90))),
-                w = COIN.W,
-                h = COIN.H,
+                w = COIN.WIDTH,
+                h = COIN.HEIGHT,
                 x0 = tx(x, tower.or),
                 x1 = x0 - w / 2,
                 x2 = x0 + w / 2;
@@ -934,14 +936,6 @@
                 return false;
             case KEY.RIGHT:
                 player.input.right = pressed;
-                event.preventDefault();
-                return false;
-            case KEY.UP:
-                player.input.up = pressed;
-                event.preventDefault();
-                return false;
-            case KEY.DOWN:
-                player.input.down = pressed;
                 event.preventDefault();
                 return false;
 
