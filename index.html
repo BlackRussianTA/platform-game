@@ -1,14 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/styles.css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <title>Heat Escape by Black Russian</title>
-    <link rel="stylesheet" href="styles/page_main_style.css"/>
-    <script src="scripts/bower_components/kineticjs/kinetic.min.js"></script>
-    <script src="scripts/canvas_animations_scripts/introSpriteCoordinates.js"></script>
-    <script src="scripts/canvas_animations_scripts/intro_animation.js"></script>
 </head>
 <body>
-<script src="scripts/load_initial.js"></script>
+    <div id="tower">
+        <div id="hud">
+            <table>
+                <tr><td><img src="images/iceCube.png"></td><td><span id="score"></span></td></tr>
+            </table>
+        </div>
+        <canvas id="canvas">
+            <div class="unsupported">
+                Sorry, this example cannot be run because your browser does not support the &lt;canvas&gt; element
+            </div>
+        </canvas>
+        <div id="instructions">
+            <b>LEFT/RIGHT</b> to move, <b>SPACE</b> to jump
+        </div>
+    </div>
+
+    <script type="text/javascript" src="js/levels.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/platform.js"></script>
 </body>
 </html>
