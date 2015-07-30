@@ -37,7 +37,7 @@ var Game = {
             }
             render(deltaTime);
             last = now;
-            requestAnimationFrame(frame, options.canvas);
+            requestAnimationFrame(frame);
         }
 
         frame();

@@ -41,9 +41,9 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="images\coin.png" />
-    <Content Include="images\coins.png" />
     <Content Include="images\ground.png" />
+    <Content Include="images\iceCube.png" />
+    <Content Include="images\iceCubes.png" />
     <Content Include="images\monster.png" />
     <Content Include="images\player.png" />
     <Content Include="index.html" />

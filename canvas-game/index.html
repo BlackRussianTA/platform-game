@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-    <title>Tower Platformer</title>
+    <title>Platformer</title>
     <style>
         body {
             background: #111;
@@ -11,23 +11,24 @@
 
         #tower {
             position: relative;
-            margin: 1em auto;
+            margin: 0em auto;
             width: 512px;
             height: 384px;
-            border: 4px solid #C080C0;
+            border: 2px solid #000000;
         }
 
         #hud {
             position: absolute;
             bottom: 0em;
-            width: 8em;
-            background-color: red;
-            opacity: 0.8;
-            border: 4px solid black;
+            left: 0em;
+            width: 10em;
+            background-color: #000000;
+            opacity: 0.75;
+            border: 2px solid black;
         }
 
         #score {
-            color: yellow;
+            color: #c0c0c0;
             font-size: 2em;
             font-family: 'Arial', cursive;
         }
@@ -36,6 +37,7 @@
             display: inline-block;
             width: 100%;
             height: 100%;
+            background-color: #383838;
         }
 
         #instructions {
@@ -46,9 +48,9 @@
             margin-top: 0.5em;
         }
 
-            #instructions b {
-                color: #DDD;
-            }
+        #instructions b {
+            color: #DDD;
+        }
 
         @media screen and (min-width: 0px) and (min-height: 0px) {
             #tower {
@@ -96,7 +98,7 @@
     <div id="tower">
         <div id="hud">
             <table>
-                <tr><td><img src="images/coin.png"></td><td><span id="score"></span></td></tr>
+                <tr><td><img src="images/iceCube.png"></td><td><span id="score"></span></td></tr>
             </table>
         </div>
         <canvas id="canvas">

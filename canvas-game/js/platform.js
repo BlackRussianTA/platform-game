@@ -24,17 +24,17 @@
         FRICTION = 1 / 8,                                                  // player take 1/8 second to stop from maxDeltaX (horizontal friction)
         IMPULSE = 15 * FRAMES_PER_SECOND,                                  // player jump impulse
         FALLING_JUMP = FRAMES_PER_SECOND / 5,                              // player allowed to jump for 1/5 second after falling off a platform
-        COIN = { WIDTH: ROW_HEIGHT, HEIGHT: ROW_HEIGHT },                  // logical size of coin
+        ICECUBE = { WIDTH: ROW_HEIGHT, HEIGHT: ROW_HEIGHT },               // logical size of iceCube
         DIRECTION = { NONE: 0, LEFT: 1, RIGHT: 2 },                        // useful enum for declaring an abstract direction
         STEP = { FRAMES: 8, W: COL_WIDTH / 10, H: ROW_HEIGHT },            // attributes of player stepping up
         KEY = { SPACE: 32, LEFT: 37, RIGHT: 39 },                          // input key codes
-        IMAGES = ['ground', 'player', 'monster', 'coins'],                 // sprite image files for loading
+        IMAGES = ['ground', 'player', 'monster', 'iceCubes'],              // sprite image files for loading
         PLAYER = {
-            RIGHT: { x: 0, y: 0, w: 72, h: 96, frames: 11, fps: 30 },      // animation - player running right
-            STAND: { x: 792, y: 0, w: 72, h: 96, frames: 1, fps: 30 },     // animation - player standing still
-            LEFT: { x: 1224, y: 0, w: 72, h: 96, frames: 11, fps: 30 },    // animation - player running left
-            HURTL: { x: 1080, y: 0, w: 72, h: 96, frames: 1, fps: 10 },    // animation - player hurt while running left
-            HURTR: { x: 1152, y: 0, w: 72, h: 96, frames: 1, fps: 10 }     // animation - player hurt while running right
+            RIGHT: { x: 1008, y: 0, w: 72, h: 96, frames: 6, fps: 30 },    // animation - player running right
+            STAND: { x: 1008, y: 0, w: 72, h: 96, frames: 1, fps: 30 },    // animation - player standing still
+            LEFT: { x: 576, y: 0, w: 72, h: 96, frames: 6, fps: 30 },      // animation - player running left
+            HURTL: { x: 72, y: 0, w: 72, h: 96, frames: 1, fps: 10 },      // animation - player hurt while running left
+            HURTR: { x: 504, y: 0, w: 72, h: 96, frames: 1, fps: 10 }      // animation - player hurt while running right
         },
         MONSTERS = [
             {
@@ -109,9 +109,9 @@
 
     function normalizex(x) { return Game.Math.normalize(x, 0, tower.w); }             // wrap x-coord around to stay within tower boundary
     function normalizeColumn(col) { return Game.Math.normalize(col, 0, tower.cols); } // wrap column  around to stay within tower boundary
-    function x2col(x) { return Math.floor(normalizex(x) / COL_WIDTH); }            // convert x-coord to tower column index
+    function x2col(x) { return Math.floor(normalizex(x) / COL_WIDTH); }               // convert x-coord to tower column index
     function y2row(y) { return Math.floor(y / ROW_HEIGHT); }                          // convert y-coord to tower row    index
-    function col2x(col) { return col * COL_WIDTH; }                                // convert tower column index to x-coord
+    function col2x(col) { return col * COL_WIDTH; }                                   // convert tower column index to x-coord
     function row2y(row) { return row * ROW_HEIGHT; }                                  // convert tower row    index to y-coord
     function x2a(x) { return 360 * (normalizex(x) / tower.w); }                       // convert x-coord to an angle around the tower
     function tx(x, r) {
@@ -177,7 +177,7 @@
                     cell = source[row][col];
                     map[row][col] = {
                         platform: (cell === "X"),
-                        coin: (cell === "o")
+                        iceCube: (cell === "o")
                     };
                 }
             }
@@ -497,12 +497,12 @@
             this.updateCollisionPoint(ul);
             this.updateCollisionPoint(ur);
 
-            if (tl.coin) return this.collectCoin(tl);
-            else if (tr.coin) return this.collectCoin(tr);
-            else if (ml.coin) return this.collectCoin(ml);
-            else if (mr.coin) return this.collectCoin(mr);
-            else if (bl.coin) return this.collectCoin(bl);
-            else if (br.coin) return this.collectCoin(br);
+            if (tl.iceCube) return this.collectIceCube(tl);
+            else if (tr.iceCube) return this.collectIceCube(tr);
+            else if (ml.iceCube) return this.collectIceCube(ml);
+            else if (mr.iceCube) return this.collectIceCube(mr);
+            else if (bl.iceCube) return this.collectIceCube(bl);
+            else if (br.iceCube) return this.collectIceCube(br);
 
             if (fallingDown && bl.blocked && !ml.blocked && !tl.blocked && nearRowSurface(this.y + bl.y, bl.row))
                 return this.collideDown(bl);
@@ -559,7 +559,7 @@
             point.blocked = point.cell.platform;
             point.platform = point.cell.platform;
             point.monster = false;
-            point.coin = false;
+            point.iceCube = false;
             if (point.cell.monster) {
                 var monster = point.cell.monster;
                 if (Game.Math.between(this.x + point.x, monster.x + monster.nx, monster.x + monster.nx + monster.w) &&
@@ -567,16 +567,16 @@
                     point.monster = point.cell.monster;
                 }
             }
-            if (point.cell.coin) {
-                if (Game.Math.between(this.x + point.x, col2x(point.col + 0.5) - COIN.WIDTH / 2, col2x(point.col + 0.5) + COIN.WIDTH / 2) &&  // center point of column +/- COIN.WIDTH/2
+            if (point.cell.iceCube) {
+                if (Game.Math.between(this.x + point.x, col2x(point.col + 0.5) - ICECUBE.WIDTH / 2, col2x(point.col + 0.5) + ICECUBE.WIDTH / 2) &&  // center point of column +/- ICECUBE.WIDTH/2
                     Game.Math.between(this.y + point.y, row2y(point.row), row2y(point.row + 1))) {
-                    point.coin = true;
+                    point.iceCube = true;
                 }
             }
         },
 
-        collectCoin: function (point) {
-            point.cell.coin = false;
+        collectIceCube: function (point) {
+            point.cell.iceCube = false;
             this.score = this.score + 50;
         },
 
@@ -783,8 +783,8 @@
                     cell = tower.getCell(r, c);
                     if (cell.platform)
                         this.renderPlatform(ctx, c, y);
-                    else if (cell.coin)
-                        this.renderCoin(ctx, c, y);
+                    else if (cell.iceCube)
+                        this.renderIceCube(ctx, c, y);
                     if (cell.monster)
                         this.renderMonster(ctx, c, y, cell.monster);
                 }
@@ -804,25 +804,26 @@
 
             ctx.fillStyle = Game.Math.darken(tower.color.platform, 60 * Math.min(1, Math.abs(a / 90)));
             ctx.fillRect(x1, y - ROW_HEIGHT, x2 - x1, ROW_HEIGHT);
+            ctx.lineWidth = 1;
             ctx.strokeRect(x1, y - ROW_HEIGHT, x2 - x1, ROW_HEIGHT);
 
         },
 
         //-------------------------------------------------------------------------
 
-        renderCoin: function (ctx, col, y) {
+        renderIceCube: function (ctx, col, y) {
 
-            var coins = this.images.coins,
+            var iceCubes = this.images.iceCubes,
                 x = col2x(col + 0.5),
                 a = Game.Math.normalizeAngle180(x2a(x) - x2a(camera.rx)),
                 d = Math.floor(12 * Math.min(1, Math.abs(a / 90))),
-                w = COIN.WIDTH,
-                h = COIN.HEIGHT,
+                w = ICECUBE.WIDTH,
+                h = ICECUBE.HEIGHT,
                 x0 = tx(x, tower.or),
                 x1 = x0 - w / 2,
                 x2 = x0 + w / 2;
 
-            ctx.drawImage(coins, 0, d * 36, coins.width, 36, x1, y - h, w, h);
+            ctx.drawImage(iceCubes, 0, d * 48, iceCubes.width, 48, x1, y - h, w, h);
 
         },
 
@@ -860,10 +861,10 @@
         createStars: function () {
             return Game.Canvas.render(CANVAS_WIDTH, CANVAS_HEIGHT, function (ctx) {
                 var n, x, y, r, max = 500,
-                  colors = ["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#800000", "#808000"],
+                  colors = ["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"],
                   sizes = [0.25, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 1, 1, 1, 1, 2, 2];
                 for (n = 0 ; n < max ; n++) {
-                    ctx.fillStyle = Game.Math.darken(Game.Math.randomChoice(colors), Game.Math.random(1, 100));
+                    ctx.fillStyle = Game.Math.darken(Game.Math.randomChoice(colors), 1);
                     x = Game.Math.randomInt(2, CANVAS_WIDTH - 4);
                     y = Game.Math.randomInt(2, CANVAS_HEIGHT - 4);
                     r = Game.Math.randomChoice(sizes);

@@ -1,7 +1,7 @@
 ﻿(function () {
     var levels = [
         {
-            "name": "demo level",
+            "name": "level 1",
             "color": {
                 "platform": "#C0C0C0",
             },
